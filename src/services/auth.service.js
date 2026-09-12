@@ -193,7 +193,7 @@ const forgotPassword = async (email) => {
     return true;
   }
 
-  const { token, hashedToken } = generateToken();
+  const { token } = generateToken();
 
   const hashedResetToken = hashToken(token);
 
@@ -210,7 +210,7 @@ const forgotPassword = async (email) => {
   });
 
   const resetUrl =
-    `${process.env.CLIENT_URL}` + `/reset-password?token=${resetToken}`;
+    `${process.env.CLIENT_URL}` + `/reset-password?token=${token}`;
 
   try {
     await sendPasswordResetEmail({

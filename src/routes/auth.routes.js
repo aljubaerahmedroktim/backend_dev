@@ -13,12 +13,13 @@ const {
   verifyEmailSchema,
   resendVerificationSchema,
 } = require("../validations/auth.validation.js");
+const { authLimiter } = require("../middleware/rate-limit.middleware.js");
 
 const router = express.Router();
 
 // authentication routes
 router.post("/register", validate(registerSchema), authController.register);
-router.post("/login", validate(loginSchema), authController.login);
+router.post("/login", authLimiter, validate(loginSchema), authController.login);
 router.post(
   "/change-password",
   authMiddleware,
@@ -27,6 +28,7 @@ router.post(
 );
 router.post(
   "/forgot-password",
+  authLimiter,
   validate(forgotPasswordSchema),
   authController.forgotPassword,
 );
@@ -42,6 +44,7 @@ router.post(
 );
 router.post(
   "/resend-verification",
+  authLimiter,
   validate(resendVerificationSchema),
   authController.resendVerificationEmail,
 );

@@ -7,7 +7,7 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String      @id @default(uuid())
   name      String
   email     String   @unique
   password  String
@@ -25,8 +25,26 @@ model User {
   isDeleted Boolean @default(false)
   deletedAt DateTime?
 
+  posts Post[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model Post {
+  id String @id @default(uuid())
+  title String
+  content String
+  imageUrl String?
+  published Boolean @default(false)
+
+  authorId String
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("posts")
 }
